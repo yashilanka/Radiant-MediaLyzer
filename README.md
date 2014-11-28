@@ -1,8 +1,8 @@
 Radiant MediaLyzer
 ===============
 Radiant MediaLyzer is a JavaScript API to detect media related features, OS, browsers (with version number) and more. It will come in handy for any media oriented JavaScript development.
-Radiant MediaLyzer is open source project released under <a href="http://www.gnu.org/copyleft/gpl.html" target="_blank">GPLv3</a>
-It features:
+
+Radiant MediaLyzer is open source project released under <a href="http://www.gnu.org/copyleft/gpl.html" target="_blank">GPLv3</a> and features:
 <ul>
 	<li>Feature detection with user agent string parsing as a fallback</li>
     <li>Feature detection for 17 media related features and 5 media related plugins (with version number)</li>
@@ -24,6 +24,10 @@ http://www.radiantmedialyzer.net
 Documentation
 -------------
 http://www.radiantmedialyzer.net/documentation.html
+
+Radiant Media Player
+-------------
+Radiant MediaLyzer is a compilation of methods used to built <a href="https://www.radiantmediaplayer.com">Radiant Media Player</a> a versatile HTML5 video player with unique call to action capabilities and with support for the latest streaming protocols (MPEG-DASH, Apple HLS, Adobe HDS). Check it out if your like Radiant MediaLyzer!
 
 ----------------------------------
 We hope you enjoy Radiant MediaLyzer! 
