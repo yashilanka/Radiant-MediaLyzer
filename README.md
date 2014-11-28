@@ -14,20 +14,20 @@ Radiant MediaLyzer is open source project released under <a href="http://www.gnu
     <li>Works on most devices of the current market from mobile phones to TVs</li>
     <li>Complete documentation</a></li>
     <li>Lightweight: only 13 kB minified (2kB gzipped)</li>
-    <li>You can visit http://www.radiantmedialyzer.net with any device to check its media related capabilities</li> 
+    <li>You can visit <a href="http://www.radiantmedialyzer.net">http://www.radiantmedialyzer.net</a> with any device to check its media related capabilities</li> 
 </ul>
 
 Presentation
 -------------
-http://www.radiantmedialyzer.net
+<a href="http://www.radiantmedialyzer.net">http://www.radiantmedialyzer.net</a>
 
 Documentation
 -------------
-http://www.radiantmedialyzer.net/documentation.html
+<a href="http://www.radiantmedialyzer.net/documentation.html">http://www.radiantmedialyzer.net/documentation.html</a>
 
 Radiant Media Player
 -------------
-Radiant MediaLyzer is a compilation of methods used to built <a href="https://www.radiantmediaplayer.com">Radiant Media Player</a> a versatile HTML5 video player with unique call to action capabilities and with support for the latest streaming protocols (MPEG-DASH, Apple HLS, Adobe HDS). Check it out if your like Radiant MediaLyzer!
+Radiant MediaLyzer is a compilation of methods used to build <a href="https://www.radiantmediaplayer.com">Radiant Media Player</a> a versatile HTML5 video player with unique call to action capabilities and with support for the latest streaming protocols (MPEG-DASH, Apple HLS, Adobe HDS). Check it out if you like Radiant MediaLyzer!
 
 ----------------------------------
 We hope you enjoy Radiant MediaLyzer! 
