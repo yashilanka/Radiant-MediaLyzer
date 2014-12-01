@@ -1,7 +1,7 @@
 Radiant MediaLyzer
 ===============
 Radiant MediaLyzer is a JavaScript API to detect media related features, OS, browsers (with version number) and more. It will come in handy for any media oriented JavaScript development.
-Radiant MediaLyzer is open source project released under <a href="http://www.radiantmedialyzer.net/license.html">MIT license</a>.
+Radiant MediaLyzer is an open source project released under <a href="http://www.radiantmedialyzer.net/license.html">MIT license</a>.
 
 It features:
 <ul>
