@@ -1,15 +1,8 @@
-/*
-Radiant Medialyzer 1.0.1 | (c) 2014 Radiant Media Player 
-
-For contact information please visit https://www.radiantmediaplayer.com/support.html
-
-Radiant Medialyzer is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-Radiant Medialyzer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with Magneticmediajs library starter edition. If not, see http://www.gnu.org/licenses/.
+/* Radiant Medialyzer 1.0.2 | Copyright  (c) 2014 Radiant Media Player 
+For contact information please visit http://www.radiantmedialyzer.net/about.html
+Released under MIT License: http://www.radiantmedialyzer.net/license.html
 */
+
 var RadiantML = (function() {
     
 	
@@ -223,47 +216,153 @@ var RadiantML = (function() {
 		}
 		return support; 
 	};
+	// Web Storage (try/catch to fix a bug in older versions of Firefox)
+	RadiantML.prototype.hasWebStorageSupport = function() {
+		try {
+			if((typeof window.localStorage !== 'undefined') && window['localStorage'] !== null && (typeof window.sessionStorage !== 'undefined')){
+				return true;
+			}else {
+				return false;	
+			}
+	  	} catch(e){
+			return false;
+	  	}
+	}
+	// Canvas support
+	RadiantML.prototype.hasCanvasSupport = function() {
+		return !!document.createElement('canvas').getContext;
+	}
+	// Canvas text API support
+	RadiantML.prototype.hasCanvasTextSupport = function() {
+		if (!this.hasCanvasSupport()) { 
+			return false; 
+		}
+		var context = document.createElement('canvas').getContext('2d');
+		return typeof context.fillText == 'function';
+	}
+	// Canvas blending support
+	RadiantML.prototype.hasCanvasBlendingSupport = function() {
+		if (!this.hasCanvasSupport()) { 
+			return false; 
+		}
+		var context = document.createElement('canvas').getContext('2d');
+		context.globalCompositeOperation = 'screen';
+		return context.globalCompositeOperation === 'screen';
+	}
+	// Canvas WebGL support
+	RadiantML.prototype.hasCanvasWebGLSupport = function() {
+		if (!this.hasCanvasSupport()) { 
+			return false; 
+		}
+		var canvas = document.createElement('canvas'),context;
+		try { 
+			context = canvas.getContext('webgl');
+			return true;
+		}
+		catch (e) { 
+			context = null; 
+		}
+		if (context === null) {
+			try { 
+				context = canvas.getContext("experimental-webgl"); 
+				return true;
+			}
+			catch (e) { 
+				context = null; 
+				return false;
+			}
+		}
+	}
+
+
+	
+	
+	/** plugin detection **/
+	// Private function to get plugin version when navigator.plugins[***].version is available
+	var _parsePluginVersion = function(version){
+		var versionArray = version.split('.');
+		return [parseInt(versionArray[0], 10), parseInt(versionArray[1], 10), parseInt(versionArray[2] || 0, 10)]; 
+	}
+	
 	// Flash support
 	RadiantML.prototype.hasFlashSupport = function() {
-		var support = false;
-		if(this._plugins){
-			var pattern = /shockwave flash/i;
-			for (i = 0; i < this._plugins.length; i++ ) {
-				if(typeof this._plugins[i].name !== 'undefined'){
-					if (pattern.test(this._plugins[i].name)){
-							return true;
+		// IE 8,9,10
+		if(this.isIe() && this.ieVersion()[0] < 11){
+			try {
+				flash = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
+				return true;
+			} catch(e) {
+				return false;
+			}			
+		}
+		else if(this._plugins){
+			var flash = navigator.plugins['Shockwave Flash'];
+			// check by direct name first as explained on https://developer.mozilla.org/en-US/docs/Web/API/NavigatorPlugins.plugins
+			if(typeof flash !== 'undefined'){
+				return true;
+			}else{
+				var pattern = /shockwave flash/i;
+				for (i = 0; i < this._plugins.length; i++ ) {
+					if(typeof this._plugins[i].name !== 'undefined'){
+						if (pattern.test(this._plugins[i].name)){
+								return true;
+						}
 					}
 				}
 			}
 		}
-		return support;
+		return false;
 	};
-	// Flash version 
+	// Private function to get Flash version when navigator.plugins[***].version is not available (ex: Chrome 39)
+	var _parseFlashVersion = function(description){
+		var pattern = /shockwave\sflash\s(\d+)\.(\d+)\s?r?(\d+)?/i;
+		var versionArray =  description.match(pattern);
+		if(versionArray){
+			return [parseInt(versionArray[1], 10), parseInt(versionArray[2], 10), parseInt(versionArray[3] || 0, 10)];
+		}
+		return null;
+	};
+	// Flash Plug-in version 
 	RadiantML.prototype.flashVersion = function() {
-		var version = null;
-		if(this._plugins){
-			var pattern1 = /shockwave flash/i;
-			for (i = 0; i < this._plugins.length; i++ ) {
-				if(typeof this._plugins[i].name !== 'undefined'){
-					if (pattern1.test(this._plugins[i].name)){
-						if(typeof this._plugins[i].version !== 'undefined'){
-							var versionArray = this._plugins[i].version;
-							versionArray = versionArray.split('.');
-							return [parseInt(versionArray[0], 10), parseInt(versionArray[1], 10), parseInt(versionArray[2] || 0, 10)]; 
-						}else if(typeof this._plugins[i].description !== 'undefined'){
-							var pattern2 = /shockwave\sflash\s(\d+)\.(\d+)\s?r?(\d+)?/i;
-							var versionArray =  this._plugins[i].description.match(pattern2);
-							if(versionArray){
-								return [parseInt(versionArray[1], 10), parseInt(versionArray[2], 10), parseInt(versionArray[3] || 0, 10)];
+		// IE 8,9,10
+		if(this.isIe() && this.ieVersion()[0] < 11){
+			try {
+				flashVersion = new ActiveXObject('ShockwaveFlash.ShockwaveFlash').GetVariable('$version');
+				var pattern = /win\s(\d+),(\d+),?(\d+)?/i;
+				var versionArray =  flashVersion.match(pattern);
+				if(versionArray){
+					return [parseInt(versionArray[1], 10), parseInt(versionArray[2], 10), parseInt(versionArray[3] || 0, 10)];
+				}
+			} catch(e) {
+				return null;
+			}			
+		}
+		else if(this._plugins){
+			var flash = navigator.plugins['Shockwave Flash'];
+			if(typeof flash !== 'undefined'){
+				if(typeof flash.version !== 'undefined'){
+					return _parsePluginVersion(flash.version);
+				}else if(typeof flash.description !== 'undefined'){
+					return _parseFlashVersion(flash.description);
+				}
+			}else{
+				var pattern1 = /shockwave flash/i;
+				for (i = 0; i < this._plugins.length; i++ ) {
+					if(typeof this._plugins[i].name !== 'undefined'){
+						if (pattern1.test(this._plugins[i].name)){
+							if(typeof this._plugins[i].version !== 'undefined'){
+								return _parsePluginVersion(this._plugins[i].version);
+							}else if(typeof this._plugins[i].description !== 'undefined'){
+								return _parseFlashVersion(this._plugins[i].description);
 							}
 						}
 					}
 				}
 			}
 		}
-		return version;
+		return null;
 	};
-	// Java support
+	// Java support - we cannot test for direct access unless we have the version number before hand
 	RadiantML.prototype.hasJavaSupport = function() {
 		var support = false;
 		if(this._plugins){
@@ -280,16 +379,13 @@ var RadiantML = (function() {
 	};
 	// Java Plug-in version 
 	RadiantML.prototype.javaPlugInVersion = function() {
-		var version = null;
 		if(this._plugins){
 			var pattern1 = /(?=.*java)(?=.*se)/i;
 			for (i = 0; i < this._plugins.length; i++ ) {
 				if(typeof this._plugins[i].name !== 'undefined'){
 					if (pattern1.test(this._plugins[i].name)){
 						if(typeof this._plugins[i].version !== 'undefined'){
-							var versionArray = this._plugins[i].version;
-							versionArray = versionArray.split('.');
-							return [parseInt(versionArray[0], 10), parseInt(versionArray[1], 10), parseInt(versionArray[2] || 0, 10)]; 
+							return _parsePluginVersion(this._plugins[i].version);
 						}else if(typeof this._plugins[i].description !== 'undefined'){
 							var pattern2 = /plug-in\s(\d+)\.(\d+)\.?(\d+)?/i;
 							var versionArray =  this._plugins[i].description.match(pattern2);
@@ -301,7 +397,7 @@ var RadiantML = (function() {
 				}
 			}
 		}
-		return version;
+		return null;
 	};
 	// Java version 
 	RadiantML.prototype.javaVersion = function() {
@@ -322,10 +418,24 @@ var RadiantML = (function() {
 		}
 		return version;
 	};
+	
+	// Private function to get plugin version when navigator.plugins[***].version is available
+	var _parseSilverlightVersion= function(description){
+		var pattern = /(\d+)\.(\d+)\.?(\d+)?/i;
+		var versionArray =  description.match(pattern);
+		if(versionArray){
+			return [parseInt(versionArray[1], 10), parseInt(versionArray[2], 10), parseInt(versionArray[3] || 0, 10)];
+		}
+		return null;
+	};
 	// Silverlight support
 	RadiantML.prototype.hasSilverlightSupport = function() {
-		var support = false;
-		if(this._plugins){
+		var silverlight = navigator.plugins['Silverlight Plug-In'];
+		// check by direct name first as explained on https://developer.mozilla.org/en-US/docs/Web/API/NavigatorPlugins.plugins
+		if(typeof silverlight !== 'undefined'){
+			return true;
+		}
+		else if(this._plugins){
 			var pattern = /silverlight/i;
 			for (i = 0; i < this._plugins.length; i++ ) {
 				if(typeof this._plugins[i].name !== 'undefined'){
@@ -335,34 +445,37 @@ var RadiantML = (function() {
 				}
 			}
 		}
-		return support;
+		return false;
 	};
 	// Silverlight version 
 	RadiantML.prototype.silverlightVersion = function() {
-		var version = null;
 		if(this._plugins){
-			var pattern1 = /silverlight/i;
-			for (i = 0; i < this._plugins.length; i++ ) {
-				if(typeof this._plugins[i].name !== 'undefined'){
-					if (pattern1.test(this._plugins[i].name)){
-						if(typeof this._plugins[i].version !== 'undefined'){
-							var versionArray = this._plugins[i].version;
-							versionArray = versionArray.split('.');
-							return [parseInt(versionArray[0], 10), parseInt(versionArray[1], 10), parseInt(versionArray[2] || 0, 10)]; 
-						}else if(typeof this._plugins[i].description !== 'undefined'){
-							var pattern2 = /(\d+)\.(\d+)\.?(\d+)?/i;
-							var versionArray =  this._plugins[i].description.match(pattern2);
-							if(versionArray){
-								return [parseInt(versionArray[1], 10), parseInt(versionArray[2], 10), parseInt(versionArray[3] || 0, 10)];
+			var silverlight = navigator.plugins['Silverlight Plug-In'];
+			if(typeof silverlight !== 'undefined'){
+				if(typeof silverlight.version !== 'undefined'){
+					return _parsePluginVersion(silverlight.version);
+				}else if(typeof flash.description !== 'undefined'){
+					return _parseSilverlightVersion(silverlight.description);
+				}
+			}else{
+				var pattern1 = /silverlight/i;
+				for (i = 0; i < this._plugins.length; i++ ) {
+					if(typeof this._plugins[i].name !== 'undefined'){
+						if (pattern1.test(this._plugins[i].name)){
+							if(typeof this._plugins[i].version !== 'undefined'){
+								return _parsePluginVersion(this._plugins[i].version);
+							}else if(typeof this._plugins[i].description !== 'undefined'){
+								return _parseSilverlightVersion(this._plugins[i].description);
 							}
 						}
 					}
 				}
 			}
 		}
-		return version;
+		return null;
 	};
-	// Quicktime support
+	
+	// Quicktime support - as with Java we cannot access plugin by name unless we know the version number
 	RadiantML.prototype.hasQuicktimeSupport = function() {
 		var support = false;
 		if(this._plugins){
@@ -379,16 +492,13 @@ var RadiantML = (function() {
 	};
 	// Quicktime version 
 	RadiantML.prototype.quicktimeVersion = function() {
-		var version = null;
 		if(this._plugins){
 			var pattern1 = /quicktime/i;
 			for (i = 0; i < this._plugins.length; i++ ) {
 				if(typeof this._plugins[i].name !== 'undefined'){
 					if (pattern1.test(this._plugins[i].name)){
 						if(typeof this._plugins[i].version !== 'undefined'){
-							var versionArray = this._plugins[i].version;
-							versionArray = versionArray.split('.');
-							return [parseInt(versionArray[0], 10), parseInt(versionArray[1], 10), parseInt(versionArray[2] || 0, 10)]; 
+							return _parsePluginVersion(this._plugins[i].version);
 						}else{
 							var pattern2 = /plug-in\s(\d+)\.(\d+)\.?(\d+)?/i;
 							var versionArray =  this._plugins[i].name.match(pattern2);
@@ -400,12 +510,17 @@ var RadiantML = (function() {
 				}
 			}
 		}
-		return version;
+		return null;
 	};
+	
 	// VLC support
 	RadiantML.prototype.hasVLCSupport = function() {
-		var support = false;
-		if(this._plugins){
+		var vlc = navigator.plugins['VLC Web Plugin'];
+		// check by direct name first as explained on https://developer.mozilla.org/en-US/docs/Web/API/NavigatorPlugins.plugins
+		if(typeof vlc !== 'undefined'){
+			return true;
+		}
+		else if(this._plugins){
 			var pattern = /vlc\sweb/i;
 			for (i = 0; i < this._plugins.length; i++ ) {
 				if(typeof this._plugins[i].name !== 'undefined'){
@@ -415,32 +530,41 @@ var RadiantML = (function() {
 				}
 			}
 		}
-		return support;
+		return false;
 	};
 	// VLC version 
+	// Private function to get plugin version when navigator.plugins[***].version is available
+	var _parseVLCVersion= function(description){
+		var pattern = /plugin\s(\d+)\.(\d+)\.?(\d+)?/i;
+		var versionArray =  description.match(pattern);
+		if(versionArray){
+			return [parseInt(versionArray[1], 10), parseInt(versionArray[2], 10), parseInt(versionArray[3] || 0, 10)];
+		}
+		return null;
+	};
 	RadiantML.prototype.VLCVersion = function() {
-		var version = null;
-		if(this._plugins){
+		var vlc = navigator.plugins['VLC Web Plugin'];
+		if(typeof vlc !== 'undefined'){
+			if(typeof vlc.version !== 'undefined'){
+				return _parsePluginVersion(vlc.version);
+			}else if(typeof vlc.description !== 'undefined'){
+				return _parseVLCVersion(vlc.description);
+			}
+		}else if(this._plugins){
 			var pattern1 = /vlc\sweb/i;
 			for (i = 0; i < this._plugins.length; i++ ) {
 				if(typeof this._plugins[i].name !== 'undefined'){
 					if (pattern1.test(this._plugins[i].name)){
 						if(typeof this._plugins[i].version !== 'undefined'){
-							var versionArray = this._plugins[i].version;
-							versionArray = versionArray.split('.');
-							return [parseInt(versionArray[0], 10), parseInt(versionArray[1], 10), parseInt(versionArray[2] || 0, 10)]; 
+							return _parsePluginVersion(this._plugins[i].version);
 						}else if(typeof this._plugins[i].description !== 'undefined'){
-							var pattern2 = /plugin\s(\d+)\.(\d+)\.?(\d+)?/i;
-							var versionArray =  this._plugins[i].description.match(pattern2);
-							if(versionArray){
-								return [parseInt(versionArray[1], 10), parseInt(versionArray[2], 10), parseInt(versionArray[3] || 0, 10)];
-							}
+							return _parseVLCVersion(this._plugins[i].description);
 						}
 					}
 				}
 			}
 		}
-		return version;
+		return null;
 	};
 	
 	
@@ -658,6 +782,7 @@ var RadiantML = (function() {
 			if (!document.__proto__) return [10,0,0];
 			return [11,0,0];
 		}
+		return null;
 	};
 	// Internet Explorer Mobile only
 	RadiantML.prototype.isIeMobile = function() {
