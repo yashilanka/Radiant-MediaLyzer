@@ -11,7 +11,7 @@ var RadiantML = (function() {
         this._plugins = this.getPlugins();
         this._mimeTypes = this.getMimeTypes();
         this._standalone = this.getStandaloneMode();
-    };
+    }
 
     /****** adding methods to the prototype ******/
     /** Getters  **/
@@ -236,11 +236,11 @@ var RadiantML = (function() {
         } catch(e) {
             return false;
         }
-    }
+    };
     // Canvas support
     RadiantML.prototype.hasCanvasSupport = function() {
         return !!document.createElement('canvas').getContext;
-    }
+    };
     // Canvas text API support
     RadiantML.prototype.hasCanvasTextSupport = function() {
         if (!this.hasCanvasSupport()) { 
@@ -248,7 +248,7 @@ var RadiantML = (function() {
         }
         var context = document.createElement('canvas').getContext('2d');
         return typeof context.fillText == 'function';
-    }
+    };
     // Canvas blending support
     RadiantML.prototype.hasCanvasBlendingSupport = function() {
         if (!this.hasCanvasSupport()) { 
@@ -257,7 +257,7 @@ var RadiantML = (function() {
         var context = document.createElement('canvas').getContext('2d');
         context.globalCompositeOperation = 'screen';
         return context.globalCompositeOperation === 'screen';
-    }
+    };
     // Canvas WebGL support
     RadiantML.prototype.hasCanvasWebGLSupport = function() {
         if (!this.hasCanvasSupport()) { 
@@ -279,7 +279,7 @@ var RadiantML = (function() {
                 return false;
             }
         }
-    }
+    };
     
     /** plugin detection **/
     // Private functions to get plugin version
@@ -669,6 +669,5 @@ var RadiantML = (function() {
     };
     
     return RadiantML;
-    
-    
+
 })();
