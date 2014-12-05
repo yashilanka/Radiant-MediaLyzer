@@ -21,47 +21,50 @@ function displayVersionArray(versionArray){
 	return version;
 }
 var rml = new RadiantML();
-document.write('<h2>Navigator object getters</h2>');
-document.write('<p>getUserAgent(): '+rml.getUserAgent()+'</p>');
-document.write('<p>getPlugins(): '+rml.getPlugins()+'</p>');
-document.write('<p>getMimeTypes(): '+rml.getMimeTypes()+'</p>');
-document.write('<p>getStandaloneMode(): '+rml.getStandaloneMode()+'</p>');
-document.write('<br/>');
-document.write('<h2>Feature detection methods</h2>');
-document.write('<h3>Video</h3>');
-document.write('<p>hasVideoTagSupport(): '+rml.hasVideoTagSupport()+'</p>');
-document.write('<p>hasMp4Support(): '+rml.hasMp4Support()+'</p>');
-document.write('<p>hasWebmSupport(): '+rml.hasWebmSupport()+'</p>');
-document.write('<p>hasOgvSupport(): '+rml.hasOgvSupport()+'</p>');
-document.write('<p>hasNativeFullscreenSupport(): '+rml.hasNativeFullscreenSupport()+'</p>');
-document.write('<h3>Audio</h3>');
-document.write('<p>hasAudioTagSupport(): '+rml.hasAudioTagSupport()+'</p>');
-document.write('<p>hasMp3Support(): '+rml.hasMp3Support()+'</p>');
-document.write('<p>hasWavSupport(): '+rml.hasWavSupport()+'</p>');
-document.write('<p>hasOggSupport(): '+rml.hasOggSupport()+'</p>');
-document.write('<p>hasWebAudioApiSupport(): '+rml.hasWebAudioApiSupport()+'</p>');
-document.write('<h3>Stream</h3>');
-document.write('<p>hasDashSupport(): '+rml.hasDashSupport()+'</p>');
-document.write('<p>hasHlsSupport(): '+rml.hasHlsSupport()+'</p>');
-document.write('<p>hasGetUserMediaSupport(): '+rml.hasGetUserMediaSupport()+'</p>');
-document.write('<p>hasRTCPeerConnectionSupport(): '+rml.hasRTCPeerConnectionSupport()+'</p>');
-document.write('<p>hasRTCSessionDescriptionSupport(): '+rml.hasRTCSessionDescriptionSupport()+'</p>');
-document.write('<p>hasWebSocketSupport(): '+rml.hasWebSocketSupport()+'</p>');
-document.write('<h3>Efficiency</h3>');
-document.write('<p>hasWebWorkerSupport(): '+rml.hasWebWorkerSupport()+'</p>');
-document.write('<p>hasWebStorageSupport(): '+rml.hasWebStorageSupport()+'</p>');
-document.write('<h3>Canvas</h3>');
-document.write('<p>hasCanvasSupport(): '+rml.hasCanvasSupport()+'</p>');
-document.write('<p>hasCanvasTextSupport(): '+rml.hasCanvasTextSupport()+'</p>');
-document.write('<p>hasCanvasTextSupport(): '+rml.hasCanvasBlendingSupport()+'</p>');
-document.write('<p>hasCanvasTextSupport(): '+rml.hasCanvasWebGLSupport()+'</p>');
-document.write('<h3>Plugins</h3>');
+var displayString = '<h2>Navigator object getters</h2>';
+displayString += '<p>getUserAgent(): '+rml.getUserAgent()+'</p>';
+displayString += '<p>getPlugins(): '+rml.getPlugins()+'</p>';
+displayString += '<p>getMimeTypes(): '+rml.getMimeTypes()+'</p>';
+displayString += '<p>getStandaloneMode(): '+rml.getStandaloneMode()+'</p><br/>';
+
+displayString += '<h2>Feature detection methods</h2><h3>Video</h3>';
+displayString += '<p>hasVideoTagSupport(): '+rml.hasVideoTagSupport()+'</p>';
+displayString += '<p>hasMp4Support(): '+rml.hasMp4Support()+'</p>';
+displayString += '<p>hasWebmSupport(): '+rml.hasWebmSupport()+'</p>';
+displayString += '<p>hasOgvSupport(): '+rml.hasOgvSupport()+'</p>';
+displayString += '<p>hasNativeFullscreenSupport(): '+rml.hasNativeFullscreenSupport()+'</p>';
+
+displayString += '<h3>Audio</h3>';
+displayString += '<p>hasAudioTagSupport(): '+rml.hasAudioTagSupport()+'</p>';
+displayString += '<p>hasMp3Support(): '+rml.hasMp3Support()+'</p>';
+displayString += '<p>hasWavSupport(): '+rml.hasWavSupport()+'</p>';
+displayString += '<p>hasOggSupport(): '+rml.hasOggSupport()+'</p>';
+displayString += '<p>hasWebAudioApiSupport(): '+rml.hasWebAudioApiSupport()+'</p>';
+
+displayString += '<h3>Stream</h3>';
+displayString += '<p>hasDashSupport(): '+rml.hasDashSupport()+'</p>';
+displayString += '<p>hasHlsSupport(): '+rml.hasHlsSupport()+'</p>';
+displayString += '<p>hasGetUserMediaSupport(): '+rml.hasGetUserMediaSupport()+'</p>';
+displayString += '<p>hasRTCPeerConnectionSupport(): '+rml.hasRTCPeerConnectionSupport()+'</p>';
+displayString += '<p>hasRTCSessionDescriptionSupport(): '+rml.hasRTCSessionDescriptionSupport()+'</p>';
+displayString += '<p>hasWebSocketSupport(): '+rml.hasWebSocketSupport()+'</p>';
+
+displayString += '<h3>Efficiency</h3>';
+displayString += '<p>hasWebWorkerSupport(): '+rml.hasWebWorkerSupport()+'</p>';
+displayString += '<p>hasWebStorageSupport(): '+rml.hasWebStorageSupport()+'</p>';
+
+displayString += '<h3>Canvas</h3>';
+displayString += '<p>hasCanvasSupport(): '+rml.hasCanvasSupport()+'</p>';
+displayString += '<p>hasCanvasTextSupport(): '+rml.hasCanvasTextSupport()+'</p>';
+displayString += '<p>hasCanvasTextSupport(): '+rml.hasCanvasBlendingSupport()+'</p>';
+displayString += '<p>hasCanvasTextSupport(): '+rml.hasCanvasWebGLSupport()+'</p>';
+
+displayString += '<h3>Plugins</h3>';
 var flashSupport = rml.flashSupport();
-document.write('<p>flashSupport(): '+flashSupport[0]+'</p>');
+displayString += '<p>flashSupport(): '+flashSupport[0]+'</p>';
 if(flashSupport[0]){
-	document.write('<p>Flash version: '+displayVersionArray(flashSupport[1])+'</p>');
+	displayString += '<p>Flash version: '+displayVersionArray(flashSupport[1])+'</p><br/>';
 }
-document.write('<br/>');
 var isMacOSX = rml.isMacOSX();
 var isWindows = rml.isWindows();
 var isWindowsNT = rml.isWindowsNT();
@@ -71,33 +74,32 @@ var isUnix = rml.isUnix();
 var isChromeOS = rml.isChromeOS();
 var isIOS = rml.isIOS();
 var isAndroid = rml.isAndroid();
-document.write('<h2>OS detection methods</h2>');
-document.write('<p>isMacOSX(): '+isMacOSX[0]+'</p>');
+displayString += '<h2>OS detection methods</h2>';
+displayString += '<p>isMacOSX(): '+isMacOSX[0]+'</p>';
 if(isMacOSX[0]){
-	document.write('<p>Mac OS X version: '+displayVersionArray(isMacOSX[1])+'</p>');
+	displayString += '<p>Mac OS X version: '+displayVersionArray(isMacOSX[1])+'</p>';
 }
-document.write('<p>isWindows(): '+isWindows[0]+'</p>');
-document.write('<p>isWindowsNT(): '+isWindowsNT[0]+'</p>');
+displayString += '<p>isWindows(): '+isWindows[0]+'</p>';
+displayString += '<p>isWindowsNT(): '+isWindowsNT[0]+'</p>';
 if(isWindowsNT[0]){
-	document.write('<p>Windows NT version: '+displayVersionArray(isWindowsNT[1])+'</p>');
+	displayString += '<p>Windows NT version: '+displayVersionArray(isWindowsNT[1])+'</p>';
 }
-document.write('<p>isWindowsPhone(): '+isWindowsPhone[0]+'</p>');
+displayString += '<p>isWindowsPhone(): '+isWindowsPhone[0]+'</p>';
 if(isWindowsPhone[0]){
-	document.write('<p>Windows Phone version: '+displayVersionArray(isWindowsPhone[1])+'</p>');
+	displayString += '<p>Windows Phone version: '+displayVersionArray(isWindowsPhone[1])+'</p>';
 }
-document.write('<p>isLinux(): '+isLinux[0]+'</p>');
-document.write('<p>isUnix(): '+isUnix[0]+'</p>');
-document.write('<p>isChromeOS(): '+isChromeOS[0]+'</p>');
-document.write('<p>isIOS(): '+isIOS[0]+'</p>');
+displayString += '<p>isLinux(): '+isLinux[0]+'</p>';
+displayString += '<p>isUnix(): '+isUnix[0]+'</p>';
+displayString += '<p>isChromeOS(): '+isChromeOS[0]+'</p>';
+displayString += '<p>isIOS(): '+isIOS[0]+'</p>';
 if(isIOS[0]){
-	document.write('<p>iOS version: '+displayVersionArray(isIOS[1])+'</p>');
+	displayString += '<p>iOS version: '+displayVersionArray(isIOS[1])+'</p>';
 }
-document.write('<p>isAndroid(): '+isAndroid[0]+'</p>');
+displayString += '<p>isAndroid(): '+isAndroid[0]+'</p>';
 if(isAndroid[0]){
-	document.write('<p>Android version: '+displayVersionArray(isAndroid[1])+'</p>');
+	displayString +='<p>Android version: '+displayVersionArray(isAndroid[1])+'</p>';
 }
-document.write('<p>isBlackBerryOS(): '+rml.isBlackBerryOS()[0]+'</p>');
-document.write('<br/>');
+displayString += '<p>isBlackBerryOS(): '+rml.isBlackBerryOS()[0]+'</p><br/>';
 var isSafari = rml.isSafari();
 var isChrome = rml.isChrome();
 var isIe = rml.isIe();
@@ -106,45 +108,47 @@ var isFirefox = rml.isFirefox();
 var isOpera = rml.isOpera();
 var isIOS = rml.isIOS();
 var isAndroid = rml.isAndroid();
-document.write('<h2>Browser detection methods</h2>');
-document.write('<p>isSafari(): '+isSafari[0]+'</p>');
+displayString += '<h2>Browser detection methods</h2>';
+displayString += '<p>isSafari(): '+isSafari[0]+'</p>';
 if(isSafari[0]){
-	document.write('<p>Safari version: '+displayVersionArray(isSafari[1])+'</p>');
+	displayString += '<p>Safari version: '+displayVersionArray(isSafari[1])+'</p>';
 }
-document.write('<p>isChrome(): '+isChrome[0]+'</p>');
+displayString += '<p>isChrome(): '+isChrome[0]+'</p>';
 if(isChrome[0]){
-	document.write('<p>Chrome version: '+displayVersionArray(isChrome[1])+'</p>');
+	ddisplayString += '<p>Chrome version: '+displayVersionArray(isChrome[1])+'</p>';
 }
-document.write('<p>isIe(): '+isIe[0]+'</p>');
+displayString += '<p>isIe(): '+isIe[0]+'</p>';
 if(isIe[0]){
-	document.write('<p>IE Version: '+displayVersionArray(isIe[1])+'</p>');
+	displayString += '<p>IE Version: '+displayVersionArray(isIe[1])+'</p>';
 }
-document.write('<p>isIeMobile(): '+isIeMobile[0]+'</p>');
+displayString += '<p>isIeMobile(): '+isIeMobile[0]+'</p>';
 if(isIeMobile[0]){
-	document.write('<p>IE mobile version: '+displayVersionArray(isIeMobile[1])+'</p>');
+	displayString += '<p>IE mobile version: '+displayVersionArray(isIeMobile[1])+'</p>';
 }
-document.write('<p>isFirefox(): '+isFirefox[0]+'</p>');
+displayString += '<p>isFirefox(): '+isFirefox[0]+'</p>';
 if(isFirefox[0]){
-	document.write('<p>Firefox version: '+displayVersionArray(isFirefox[1])+'</p>');
+	displayString += '<p>Firefox version: '+displayVersionArray(isFirefox[1])+'</p>';
 }
-document.write('<p>isOpera(): '+isOpera[0]+'</p>');
+displayString += '<p>isOpera(): '+isOpera[0]+'</p>';
 if(isOpera[0]){
-	document.write('<p>Opera version: '+displayVersionArray(isOpera[1])+'</p>');
+	displayString += '<p>Opera version: '+displayVersionArray(isOpera[1])+'</p>';
 }
-document.write('<p>isOperaMini(): '+rml.isOperaMini()[0]+'</p>');
-document.write('<p>isNativeAndroidBrowser(): '+rml.isNativeAndroidBrowser()[0]+'</p>');
-document.write('<br/>');
-document.write('<h2>WebView detection methods</h2>');
-document.write('<p>isIOSStandaloneMode(): '+rml.isIOSStandaloneMode()+'</p>');
-document.write('<p>isIOSWebView(): '+rml.isIOSWebView()+'</p>');
-document.write('<p>isAndroidChromeWebView(): '+rml.isAndroidChromeWebView()+'</p>');
-document.write('<br/>');
-document.write('<h2>Device detection methods</h2>');
-document.write('<p>isChromecast(): '+rml.isChromecast()+'</p>');
-document.write('<p>isIphone(): '+rml.isIphone()+'</p>');
-document.write('<p>isIpod(): '+rml.isIpod()+'</p>');
-document.write('<p>isIpad(): '+rml.isIpad()+'</p>');
-document.write('<p>isAppleTV(): '+rml.isAppleTV()+'</p>');
+displayString += '<p>isOperaMini(): '+rml.isOperaMini()[0]+'</p>';
+displayString += '<p>isNativeAndroidBrowser(): '+rml.isNativeAndroidBrowser()[0]+'</p><br/>';
+
+displayString += '<h2>WebView detection methods</h2>';
+displayString += '<p>isIOSStandaloneMode(): '+rml.isIOSStandaloneMode()+'</p>';
+displayString += '<p>isIOSWebView(): '+rml.isIOSWebView()+'</p>';
+displayString += '<p>isAndroidChromeWebView(): '+rml.isAndroidChromeWebView()+'</p><br/>';
+
+displayString += '<h2>Device detection methods</h2>';
+displayString += '<p>isChromecast(): '+rml.isChromecast()+'</p>';
+displayString += '<p>isIphone(): '+rml.isIphone()+'</p>';
+displayString += '<p>isIpod(): '+rml.isIpod()+'</p>';
+displayString += '<p>isIpad(): '+rml.isIpad()+'</p>';
+displayString += '<p>isAppleTV(): '+rml.isAppleTV()+'</p>';
+
+document.write(displayString);
 </script>
 </div>
 </div>
